@@ -1,6 +1,12 @@
 const passport = require("passport");
 // should be executed in the index.js file , we are exporting a fuction with an argument
 module.exports = (app) => {
+    app.get("/", (req, res) => {
+        res.send({
+            developer: "Stone Sespi",
+            productName: "Emaily",
+        });
+    });
     app.get(
         "/auth/google",
         passport.authenticate("google", {
