@@ -1,41 +1,36 @@
 // TODO : need to deploy this development app in heroku
 // ! node is not updated to handle ES2015 modules , it uses commonJS modules
 const express = require("express");
+const mongoose = require("mongoose");
+const cookieSession = require("cookie-session");
 const passport = require("passport");
-const GoogleStatergy = require("passport-google-oauth20").Strategy; // need a seperate statergy for every new organisation
 const keys = require("./config/keys");
+
+require("./models/User"); // running the file for Model Class in mongoose
+require("./services/passport"); // ? just calling require will execute the /services/passport.js file
+
+// * connecting to the mongoDB Atlas using the address link
+mongoose.connect(keys.mongoURI);
 
 const app = express();
 
-// telling the general passport library to use specific stratergy
-passport.use(
-    new GoogleStatergy(
-        {
-            clientID: keys.googleClientID,
-            clientSecret: keys.googleClientSecret,
-            callbackURL: "/auth/google/callback",
-        },
-        (accessToken,refreshToken,profile,done) => {
+// @ app.use -> wiring up the middleware to express
+// @ middlewares -> are small functions that modify requests before they are sent off to the routes
 
-            // ? this is the function that passports calls after requesting google for info
-            console.log(`accessToken : ${accessToken}`);
-            console.log(`refreshToken : ${refreshToken}`);
-            console.log(`profile :`);
-            console.log(profile);
-            console.log(`done : `);
-            console.log(done);
-        }
-    )
-);
-
-app.get(
-    "/auth/google",
-    passport.authenticate("google", {
-        scope: ["profile", "email"],
+// ! express has no idea how manage cookies , we use cookie-management library to handle cookies
+app.use(
+    cookieSession({
+        //this is a configuration object
+        maxAge: 30 * 24 * 60 * 60 * 1000, // passing in milliseconds
+        keys: [keys.cookieKeys], // for encryption
     })
 );
 
-app.get("/auth/google/callback",passport.authenticate("google"));
+// ! Telling passport to manage authentication using cookies
+app.use(passport.initialize());
+app.use(passport.session());
+
+require("./routes/authRoutes")(app); // ? executing the function returned by authRoutes file
 
 const PORT = process.env.PORT || 3030;
 // listening on 5000 port number
