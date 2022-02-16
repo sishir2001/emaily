@@ -1,21 +1,23 @@
 {
-  "name": "server",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "engines": {
-    "node": "14.17.0",
-    "npm": "8.1.1"
-  },
-  "scripts": {
-    "start": "node index.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.17.2",
-    "passport": "^0.5.2",
-    "passport-google-oauth20": "^2.0.0"
-  }
+    "name": "server",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "engines": {
+        "node": "14.17.0",
+        "npm": "8.1.1"
+    },
+    "scripts": {
+        "start": "node index.js",
+        "dev": "nodemon index.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.17.2",
+        "nodemon": "^2.0.15",
+        "passport": "^0.5.2",
+        "passport-google-oauth20": "^2.0.0"
+    }
 }
